@@ -1,0 +1,96 @@
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <set>
+#include <utility>
+
+using namespace std;
+
+// using std::vector;
+// using std::string;
+// using std::pair;
+// using std::min;
+
+class Points
+{
+private:
+public:
+	pair<int, int> pt;
+	Points(int x, int y);
+	~Points();
+
+	bool operator<(const Points &rhs) const { return ((pt.first + pt.second) < (rhs.pt.first + rhs.pt.second)); }
+	void insert(int x, int y)
+	{
+		pt.first = x;
+		pt.second = y;
+	}
+};
+
+Points::Points(int x, int y)
+{
+	pt.first = x;
+	pt.second = y;
+}
+
+Points::~Points()
+{
+}
+
+double minimal_distance(vector<int> x, vector<int> y, multiset<pair<int, int>> &points)
+{
+
+	cout << "======= Printing Sorted Points =======" << endl;
+	for (auto &e : points)
+	{
+		cout << e.first << " " << e.second << endl;
+	}
+	cout << "======= Printed Successfully =======" << endl;
+
+	double min = 9000.0;
+	set<pair<int, int>>::iterator it = points.begin();
+
+	while (it != points.end())
+	{
+		int x1 = it->first;
+		int y1 = it->second;
+		it++;
+		if (it == points.end())
+		{
+			break;
+		}
+		int x2 = it->first;
+		int y2 = it->second;
+
+		double dist = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+		if (dist < min)
+		{
+			min = dist;
+		}
+	}
+
+	return min;
+}
+
+int main()
+{
+	size_t n;
+	cin >> n;
+	multiset<pair<int, int>> points;
+	vector<int> x(n);
+	vector<int> y(n);
+
+	for (size_t i = 0; i < n; i++)
+	{
+		// cin >> x[i] >> y[i];
+		pair<int, int> tmp_point;
+		cin >> tmp_point.first >> tmp_point.second;
+		points.insert(tmp_point);
+	}
+	cout << std::fixed;
+	cout << std::setprecision(9) << minimal_distance(x, y, points) << "\n";
+}
